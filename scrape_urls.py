@@ -11,6 +11,7 @@ import time
 import tldextract
 import requests
 import concurrent.futures
+import os
 
 
 def yahoo(data):
@@ -35,7 +36,7 @@ def yahoo(data):
             else:
                 print(f"Got no result for url: {url}")
     
-        articles.append(url, text, sentiment)
+        articles.append((url, text, sentiment))
     return articles
 
 
@@ -64,10 +65,9 @@ async def get_articles(data):
 
 
 if __name__ == "__main__":
-
     data = {k:[] for k, v in scraper_functions.items() if v}
 
-    with open('./news_articles.csv', newline="\n") as csvfile:
+    with open(os.getcwd() + '/news_articles.csv', newline="\n") as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
         for row in reader:
             url, sentiment = row
@@ -79,3 +79,5 @@ if __name__ == "__main__":
     
     
     results = asyncio.run(get_articles(data))
+
+    i = results
