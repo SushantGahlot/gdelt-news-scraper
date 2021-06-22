@@ -45,4 +45,7 @@ class ArticleWriter(Process):
     def run(self):
         c = Thread(target=self._consumer)
         c.start()
-        c.join()
+        try:
+            c.join()
+        except KeyboardInterrupt:
+            print("Keyboard interrupt in article writer")

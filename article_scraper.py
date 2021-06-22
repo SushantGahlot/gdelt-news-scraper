@@ -82,8 +82,8 @@ class ArticleScraper(Process):
     def run(self):
         loop = asyncio.new_event_loop()
         for signame in ['SIGTERM', 'SIGINT', 'SIGHUP']:
-                    loop.add_signal_handler(getattr(signal, signame), lambda: asyncio.ensure_future(
+                    loop.add_signal_handler(getattr(signal, signame), lambda: asyncio.create_task(
                         self.signal_handler(signame, loop)))
-
-        loop.run_until_complete(self._consumer())
+        loop.create_task(self._consumer())
+        loop.run_forever()
     

@@ -37,6 +37,13 @@ async def nytimes(url, session):
     await asyncio.sleep(0.05)
     text = ""
 
+    # Do not want urls like -
+    # https://www.nytimes.com/live/2021/06/21/business/economy-stock-market-news
+    # They contain multiple news articles and sentiment score for such a post 
+    # does not reflect the sentiment of each article mentioned in the url
+    if "/live/" in url:
+        return "Exception"
+
     try:
         resp = await session.get(url)
     except Exception as e:
@@ -50,7 +57,6 @@ async def nytimes(url, session):
                 try:
                     if section["name"] == "articleBody":
                         text = section.get_text().strip().replace("\n", "")
-                        break
                 except KeyError:
                     pass
         else:
