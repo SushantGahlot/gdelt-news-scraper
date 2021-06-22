@@ -28,19 +28,17 @@ def main():
     article_scraper = ArticleScraper(
         news_sources=sources, scraper_queue=scraper_queue, writer_queue=writer_queue)
     article_writer = ArticleWriter(writer_queue)
+    
+    gdelt_scraper.start()
+    article_scraper.start()
+    article_writer.start()
 
     try:
-        gdelt_scraper.start()
-        article_scraper.start()
-        article_writer.start()
+        gdelt_scraper.join()
+        article_scraper.join()
+        article_writer.join()
     except KeyboardInterrupt:
-        gdelt_scraper.terminate()
-        article_writer.terminate()
-        article_scraper.terminate()
-
-    gdelt_scraper.join()
-    article_scraper.join()
-    article_writer.join()
+        print("Keyboard interrupt in main.")
 
 
 if __name__ == "__main__":

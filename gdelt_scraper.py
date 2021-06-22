@@ -124,6 +124,8 @@ class GDELTScraper(Process):
                             ar = yaml.safe_load(article)
                         except yaml.reader.ReaderError:
                             continue
+                        except KeyboardInterrupt:
+                            break
 
                         self.gdelt_extractor(ar)
 
@@ -149,3 +151,6 @@ class GDELTScraper(Process):
             for _ in consumers:
                 self.internal_queue.put(None)
             self.scraper_queue.put(None)
+        finally:
+            for c in consumers:
+                c.terminate()
