@@ -53,7 +53,7 @@ async def nytimes(url, session):
         if resp.status == 200:
             text = await resp.text()
             soup = BeautifulSoup(text, "html.parser")
-            for section in soup.find_all("session"):
+            for section in soup.find_all("section"):
                 try:
                     if section["name"] == "articleBody":
                         text = section.get_text().strip().replace("\n", "")

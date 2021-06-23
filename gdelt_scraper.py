@@ -77,9 +77,11 @@ class GDELTScraper(Process):
         if ar.get("lang") == "en":
             for news_source in self.news_sources:
                 if news_source in ar.get("url"):
-                    print("Putting in queue")
+                    if self.scraper_queue.full():
+                        print("Queue full, waiting for tasks to complete.")
                     self.scraper_queue.put(
                         {"url": ar.get("url"), "sentiment": ar.get("score"), "source": news_source})
+                    print("Putting in queue")
 
     def _consumer(self):
         '''
@@ -148,6 +150,15 @@ class GDELTScraper(Process):
             print("Killing processes. Please wait for all the processes to stop.")
             # Can terminate this, no child processes of this one.
             p.terminate()
+            
+            # Empty the queues
+            print("Emptying queues")
+            while not self.internal_queue.empty():
+                self.internal_queue.get()
+
+            while not self.scraper_queue.empty():
+                self.scraper_queue.get()
+            
             for _ in consumers:
                 self.internal_queue.put(None)
             self.scraper_queue.put(None)
