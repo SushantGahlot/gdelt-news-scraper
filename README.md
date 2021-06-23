@@ -2,7 +2,7 @@
 
 ## Introduction
 
-GDELT scraper to scrape news articles and their sentiment scores to build news sentiment analysis models.
+GDELT scraper to scrape news articles and their sentiment scores to build machine learning news sentiment analysis models. This will help generating dataset of annotated news articles with their sentiment scores.
 
 1. Scrape [GDELT](https://www.gdeltproject.org) data to get news article urls and their sentiment scores 
 2. Scrape news articles from their urls.
